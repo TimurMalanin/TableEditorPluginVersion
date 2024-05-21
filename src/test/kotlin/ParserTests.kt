@@ -1,4 +1,4 @@
-import parser.TermSolver
+import com.example.tableeditorpluginversion.parser.TermSolver
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

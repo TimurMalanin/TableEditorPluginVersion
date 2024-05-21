@@ -1,4 +1,4 @@
-package parser
+package com.example.tableeditorpluginversion.parser
 
 import java.util.*
 

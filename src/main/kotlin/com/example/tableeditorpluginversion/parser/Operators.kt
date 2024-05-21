@@ -1,4 +1,4 @@
-package parser
+package com.example.tableeditorpluginversion.parser
 
 import kotlin.math.pow
 import kotlin.math.sqrt

@@ -71,15 +71,14 @@ class UI(
         val columnIndex = columnLetterToIndex(columnLetter)
         if (columnIndex < 0 || columnIndex >= tableView.tableModel.columnCount) return
 
-        val minValue = (0 until tableView.tableModel.rowCount)
+        var minValue = (0 until tableView.tableModel.rowCount)
             .mapNotNull { tableView.tableModel.getValueAt(it, columnIndex)?.toString() }
-            .minOrNull() ?: 0
-
+            .minOrNull()
+        if (minValue.isNullOrEmpty()) minValue = 0.toString()
         (0 until tableView.tableModel.rowCount).forEach { row ->
             tableView.tableModel.setValueAt(minValue, row, columnIndex)
         }
     }
-
 
     private fun columnLetterToIndex(columnLetter: String): Int = columnLetter.uppercase().first() - 'A' + 1
 }

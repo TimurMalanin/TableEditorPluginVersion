@@ -1,7 +1,7 @@
 package com.example.tableeditorpluginversion.ui.formula
 
-import parser.TermSolver.solvePostfix
-import parser.TermSolver.transformInfixToPostfix
+import com.example.tableeditorpluginversion.parser.TermSolver.solvePostfix
+import com.example.tableeditorpluginversion.parser.TermSolver.transformInfixToPostfix
 import javax.swing.event.TableModelListener
 import javax.swing.table.DefaultTableModel
 
@@ -18,7 +18,7 @@ class FormulaProcessor(
             print(result)
             transformInfixToPostfix(result).takeIf { it.isPresent }?.let {
                 val resultNum = solvePostfix(it.get())
-                print(resultNum)
+
                 if (resultNum.isInfinite() || resultNum.isNaN()) {
                     throw ArithmeticException("Division by zero")
                 }

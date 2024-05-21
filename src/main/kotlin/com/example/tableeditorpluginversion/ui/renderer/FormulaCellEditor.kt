@@ -7,18 +7,14 @@ import javax.swing.JTable
 import javax.swing.JTextField
 import javax.swing.table.TableCellEditor
 
-class FormulaCellEditor(    private val formulaManager: TableFormulaManager
-) : AbstractCellEditor(), TableCellEditor {
+class FormulaCellEditor(private val formulaManager: TableFormulaManager) : AbstractCellEditor(), TableCellEditor {
     private val textField = JTextField()
 
     override fun getTableCellEditorComponent(
         table: JTable, value: Any?, isSelected: Boolean, row: Int, column: Int
     ): Component {
         val key = Pair(row, column)
-//        textField.text = TableFormulas.formulas[key] ?: value.toString()
         textField.text = formulaManager.getFormula((key)) ?: value.toString()
-
-
 
         return textField
     }
