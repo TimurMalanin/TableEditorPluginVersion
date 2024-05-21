@@ -46,6 +46,7 @@ class TableView(private val data: TableData) {
     private fun configureTableView() {
         setupTableSelectionModel()
         table.model.addTableModelListener(TableModelListener(tableModel, formula))
+
         table.getColumn("#").cellRenderer = CenterGrayRenderer(table)
         for (i in 1 until table.columnCount) {
             table.columnModel.getColumn(i).cellRenderer = FormulaRenderer(formula)

@@ -15,10 +15,10 @@ class FormulaProcessor(
     fun processFormula(formula: String, row: Int, col: Int) {
         try {
             val result = splitFormula(formula).joinToString("") { processPart(it, row, col) }
-
+            print(result)
             transformInfixToPostfix(result).takeIf { it.isPresent }?.let {
                 val resultNum = solvePostfix(it.get())
-
+                print(resultNum)
                 if (resultNum.isInfinite() || resultNum.isNaN()) {
                     throw ArithmeticException("Division by zero")
                 }
@@ -59,6 +59,7 @@ class FormulaProcessor(
 
         else -> part
     }
+
 
     private fun updateModel(resultNum: Number, row: Int, col: Int) {
         model.removeTableModelListener(tableModelListener)

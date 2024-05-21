@@ -6,7 +6,9 @@ import java.io.File
 import java.io.FileWriter
 import javax.swing.*
 
-class UI(data: TableData) {
+class UI(
+    data: TableData,
+) {
     private val frame = JFrame("CSV Data Viewer").apply {
         setSize(500, 500)
         defaultCloseOperation = JFrame.EXIT_ON_CLOSE
@@ -70,13 +72,14 @@ class UI(data: TableData) {
         if (columnIndex < 0 || columnIndex >= tableView.tableModel.columnCount) return
 
         val minValue = (0 until tableView.tableModel.rowCount)
-            .mapNotNull { tableView.tableModel.getValueAt(it, columnIndex)?.toString()?.toDoubleOrNull() }
-            .minOrNull() ?: 0.0
+            .mapNotNull { tableView.tableModel.getValueAt(it, columnIndex)?.toString() }
+            .minOrNull() ?: 0
 
         (0 until tableView.tableModel.rowCount).forEach { row ->
             tableView.tableModel.setValueAt(minValue, row, columnIndex)
         }
     }
+
 
     private fun columnLetterToIndex(columnLetter: String): Int = columnLetter.uppercase().first() - 'A' + 1
 }
