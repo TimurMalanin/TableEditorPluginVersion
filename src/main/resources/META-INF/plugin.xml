@@ -8,15 +8,15 @@
     <name>TableEditorPluginVersion</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="t.malanin@gmail.com" url="https://www.yourcompany.com">TimurMalanin</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
-  ]]></description>
+    This plugin enhances your IDE by providing features to edit and manage tables directly from CSV files. It includes functionality to load and visualize CSV data in a table format.<br>
+    <em>Supports basic HTML for formatting.</em>
+    ]]></description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -24,7 +24,16 @@
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
-    <extensions defaultExtensionNs="com.intellij">
 
-    </extensions>
+    <!-- Actions section defines UI elements such as menu items, buttons, etc. -->
+    <actions>
+        <action id="LoadCsvAction"
+                class="com.example.tableeditorpluginversion.LoadCsvAction"
+                text="Load CSV"
+                description="Loads CSV data into the table">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+
+
 </idea-plugin>

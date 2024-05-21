@@ -11,6 +11,14 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.opencsv:opencsv:5.6")
+    testImplementation(kotlin("test"))
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+}
+
+
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {

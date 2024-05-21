@@ -1,4 +1,29 @@
 package com.example.tableeditorpluginversion.ui.renderer
 
-class FormulaCellEditor {
+import com.example.tableeditorpluginversion.ui.formula.TableFormulaManager
+import java.awt.Component
+import javax.swing.AbstractCellEditor
+import javax.swing.JTable
+import javax.swing.JTextField
+import javax.swing.table.TableCellEditor
+
+class FormulaCellEditor(    private val formulaManager: TableFormulaManager
+) : AbstractCellEditor(), TableCellEditor {
+    private val textField = JTextField()
+
+    override fun getTableCellEditorComponent(
+        table: JTable, value: Any?, isSelected: Boolean, row: Int, column: Int
+    ): Component {
+        val key = Pair(row, column)
+//        textField.text = TableFormulas.formulas[key] ?: value.toString()
+        textField.text = formulaManager.getFormula((key)) ?: value.toString()
+
+
+
+        return textField
+    }
+
+    override fun getCellEditorValue(): Any {
+        return textField.text
+    }
 }

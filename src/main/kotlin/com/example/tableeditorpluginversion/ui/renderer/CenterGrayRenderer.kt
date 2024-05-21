@@ -1,4 +1,4 @@
-package ui.renderer
+package com.example.tableeditorpluginversion.ui.renderer
 
 import java.awt.Component
 import javax.swing.JTable

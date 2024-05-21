@@ -1,15 +1,23 @@
-package ui
+package com.example.tableeditorpluginversion.ui
 
-import ui.formula.TableModelListener
-import ui.renderer.CenterGrayRenderer
+import com.example.tableeditorpluginversion.ui.formula.TableFormulaManager
+import com.intellij.ui.table.JBTable
+import com.example.tableeditorpluginversion.ui.formula.TableModelListener
+import com.example.tableeditorpluginversion.ui.renderer.CenterGrayRenderer
+import com.example.tableeditorpluginversion.ui.renderer.FormulaRenderer
+import com.example.tableeditorpluginversion.ui.renderer.FormulaCellEditor
+import com.intellij.ui.components.JBScrollPane
 import javax.swing.DefaultListSelectionModel
 import javax.swing.JScrollPane
 import javax.swing.JTable
 import javax.swing.table.DefaultTableModel
 
-class TableView {
-    private val tableModel = createTableModel()
-    private val table = JTable(tableModel).apply {
+typealias TableData = Array<Array<String>>
+
+class TableView(private val data: TableData) {
+    val tableModel = createTableModel()
+    private val formula = TableFormulaManager()
+    private val table = JBTable(tableModel).apply {
         autoResizeMode = JTable.AUTO_RESIZE_OFF
     }
 
@@ -17,26 +25,32 @@ class TableView {
         configureTableView()
     }
 
-    fun getView(): JScrollPane = JScrollPane(table).apply {
+    fun getView(): JScrollPane = JBScrollPane(table).apply {
         verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
         horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
     }
 
     fun addRow() {
-        val newRow = Array(tableModel.columnCount) { "" }
-        tableModel.addRow(newRow)
+        tableModel.addRow( Array(tableModel.columnCount) { "" })
         updateRowNumbers()
     }
 
     fun addColumn() {
-        tableModel.addColumn(getColumnLabel(tableModel.columnCount - 1))
+        val columnName = getColumnLabel(tableModel.columnCount - 1)
+        tableModel.addColumn(columnName)
+        for (i in 0 until tableModel.rowCount)
+            tableModel.setValueAt("", i, tableModel.columnCount - 1)
         restoreColumnSettings()
     }
 
     private fun configureTableView() {
         setupTableSelectionModel()
-        table.model.addTableModelListener(TableModelListener(tableModel))
+        table.model.addTableModelListener(TableModelListener(tableModel, formula))
         table.getColumn("#").cellRenderer = CenterGrayRenderer(table)
+        for (i in 1 until table.columnCount) {
+            table.columnModel.getColumn(i).cellRenderer = FormulaRenderer(formula)
+            table.columnModel.getColumn(i).cellEditor = FormulaCellEditor(formula)
+        }
     }
 
     private fun setupTableSelectionModel() {
@@ -50,17 +64,19 @@ class TableView {
     }
 
     private fun createTableModel(): DefaultTableModel {
-        val data = arrayOf(
+        val sampleData = arrayOf(
             arrayOf("", "1", "2", "=A1+B1"),
             arrayOf("", "4", "5", "=A2+B2")
         )
 
+        val tableContent = if (data.isEmpty()) sampleData else data
+
         val columnNames = arrayOf("#", "A", "B", "C")
-        return object : DefaultTableModel(data, columnNames) {
+        return object : DefaultTableModel(tableContent, columnNames) {
             override fun isCellEditable(row: Int, column: Int) = column != 0
 
             init {
-                data.indices.forEach { rowIndex ->
+                tableContent.indices.forEach { rowIndex ->
                     setValueAt(rowIndex + 1, rowIndex, 0)
                 }
             }
@@ -68,7 +84,7 @@ class TableView {
     }
 
     private fun updateRowNumbers() {
-        for (i in 0..<tableModel.rowCount) {
+        for (i in 0 until tableModel.rowCount) {
             tableModel.setValueAt((i + 1).toString(), i, 0)
         }
     }
@@ -80,9 +96,11 @@ class TableView {
         .reversed()
         .joinToString("")
 
-
     private fun restoreColumnSettings() {
         table.getColumn("#").cellRenderer = CenterGrayRenderer(table)
         updateRowNumbers()
+        for (i in 1 until table.columnCount) {
+            table.columnModel.getColumn(i).cellRenderer = FormulaRenderer(formula)
+        }
     }
 }
