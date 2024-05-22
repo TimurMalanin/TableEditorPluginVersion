@@ -19,7 +19,7 @@ The application recognizes the following operations:
 - The application is now available as a plugin. You can right-click on any CSV file and select "Load CSV" to transform it into a table. The plugin also supports exporting the table back to a CSV file after making any changes.
 
 **Dynamic Formula Recalculation**
-- Automatically updates all dependent formulas whenever the table data changes, ensuring accurate and up-to-date values.
+- Automatically updates all dependent formulas whenever the table data changes, ensuring accurate and up-to-date values. This is achieved through the use of a directed graph of formulas and topological sorting, which ensures that all dependencies are resolved in the correct order.
 
 **"Transform" Button**
 - Changes all values in a specified column to the minimum value found in that column, and triggers a recalculation of all dependent formulas.
@@ -29,19 +29,6 @@ The application recognizes the following operations:
 ![Example of work GIF](media/exampleOfWork.gif)
 
 
-# Running the Project
-
-First, clone the repository using the following git command:
-
-```bash
-git clone https://github.com/TimurMalanin/TableEditorPluginVersion.git
-```
-
-Navigate to the project directory:
-
-```bash
-cd TableEditorpluginVersion
-```
 
 Run the project:
 
