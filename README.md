@@ -29,19 +29,6 @@ The application recognizes the following operations:
 ![Example of work GIF](media/exampleOfWork.gif)
 
 
-# Running the Project
-
-First, clone the repository using the following git command:
-
-```bash
-git clone https://github.com/TimurMalanin/TableEditorPluginVersion.git
-```
-
-Navigate to the project directory:
-
-```bash
-cd TableEditorpluginVersion
-```
 
 Run the project:
 
