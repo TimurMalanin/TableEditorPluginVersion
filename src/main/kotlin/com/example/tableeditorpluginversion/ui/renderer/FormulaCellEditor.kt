@@ -1,5 +1,6 @@
 package com.example.tableeditorpluginversion.ui.renderer
 
+import com.example.tableeditorpluginversion.graph.Node
 import com.example.tableeditorpluginversion.ui.formula.TableFormulaManager
 import java.awt.Component
 import javax.swing.AbstractCellEditor
@@ -13,7 +14,7 @@ class FormulaCellEditor(private val formulaManager: TableFormulaManager) : Abstr
     override fun getTableCellEditorComponent(
         table: JTable, value: Any?, isSelected: Boolean, row: Int, column: Int
     ): Component {
-        val key = Pair(row, column)
+        val key = Node(row, column)
         textField.text = formulaManager.getFormula((key)) ?: value.toString()
 
         return textField

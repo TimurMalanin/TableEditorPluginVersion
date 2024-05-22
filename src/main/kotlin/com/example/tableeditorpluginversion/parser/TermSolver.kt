@@ -6,7 +6,6 @@ class UnknownOperatorException(message: String) : Exception(message)
 class InvalidExpressionException(message: String) : Exception(message)
 class InsufficientOperandsException(message: String) : Exception(message)
 
-
 object TermSolver {
     private val operators: HashMap<String, Operator> = hashMapOf(
         "+" to BinaryOperator.PLUS,
@@ -15,7 +14,7 @@ object TermSolver {
         "/" to BinaryOperator.DIVIDE,
         "^" to BinaryOperator.POW,
         "_" to UnaryOperator.NEGATION,
-        "~" to UnaryOperator.SQRT,
+        "~" to UnaryOperator.SQRT
     )
 
     private val functions = listOf("sqrt")
@@ -41,17 +40,19 @@ object TermSolver {
                 isNonOperator(currentChar, normalizedInfix[index]) -> {
                     handleNonOperator(normalizedInfix, index, operand, postfix)
                     index++
+                    expectUnary = false
                 }
 
                 else -> {
                     flushOperand(operand, postfix)
                     processCharacter(currentChar, opStack, postfix, expectUnary)
-                    expectUnary = currentChar == "("
+                    expectUnary = currentChar == "(" || currentChar == ")" || operators.containsKey(currentChar)
                     index++
                 }
             }
         }
 
+        flushOperand(operand, postfix)
         flushStackToPostfix(opStack, postfix)
         return Optional.of(postfix.toString())
     }
@@ -78,15 +79,24 @@ object TermSolver {
     ) {
         val operatorToAdd = when {
             expectUnary && operator == "-" -> "_"
-            expectUnary && operator == "sqrt" -> "~"
             else -> operator
         }
 
-        if (shouldPushOperatorToStack(opStack)) {
-            opStack.push(operatorToAdd)
-        } else {
-            processOperatorsInStack(operatorToAdd, opStack, postfix)
+        while (opStack.isNotEmpty() && opStack.peek() != "(") {
+            val topOp = opStack.peek()
+            val topOperator = operators[topOp] ?: break
+            val currentOperator = operators[operatorToAdd] ?: break
+
+            if ((currentOperator.priority < topOperator.priority) ||
+                (currentOperator.priority == topOperator.priority && !currentOperator.isRightAssociative)
+            ) {
+                postfix.add(opStack.pop())
+            } else {
+                break
+            }
         }
+
+        opStack.push(operatorToAdd)
     }
 
     private fun handleFunction(
@@ -124,26 +134,6 @@ object TermSolver {
         }
     }
 
-    private fun shouldPushOperatorToStack(opStack: Stack<String>) = opStack.isEmpty() || opStack.peek() == "("
-
-    private fun processOperatorsInStack(
-        currentOperator: String,
-        opStack: Stack<String>,
-        postfix: StringJoiner,
-    ) {
-        val currentOp =
-            operators[currentOperator] ?: throw UnknownOperatorException("Operator not defined: $currentOperator")
-
-        while (opStack.isNotEmpty() && opStack.peek() != "(") {
-            val stackOp = operators[opStack.peek()] ?: throw UnknownOperatorException("Operator not defined on stack")
-            if (currentOp.priority > stackOp.priority || (currentOp.priority == stackOp.priority && currentOp.isRightAssociative)) {
-                break
-            }
-            postfix.add(opStack.pop())
-        }
-        opStack.push(currentOperator)
-    }
-
     private fun getFunction(infix: String, index: Int): Pair<String, Int> {
         val matchingFunction = functions.firstOrNull { infix.startsWith(it, index) }
         return Pair(matchingFunction ?: "", matchingFunction?.length ?: 0)
@@ -152,7 +142,7 @@ object TermSolver {
     private fun isFunction(infix: String, index: Int) = functions.any { infix.startsWith(it, index) }
 
     private fun isNonOperator(current: String, char: Char) =
-        !operators.containsKey(current) && char != '(' && char != ')' && current != "~"
+        !operators.containsKey(current) && char != '(' && char != ')'
 
     private fun isLastCharacter(index: Int, normalizedInfix: String) = index == normalizedInfix.length - 1
 
@@ -202,5 +192,4 @@ object TermSolver {
         val left = stack.pop()
         stack.push(operator.compute(left, right))
     }
-
 }

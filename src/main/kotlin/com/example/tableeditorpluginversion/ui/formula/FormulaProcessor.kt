@@ -1,5 +1,6 @@
 package com.example.tableeditorpluginversion.ui.formula
 
+import com.example.tableeditorpluginversion.graph.Node
 import com.example.tableeditorpluginversion.parser.TermSolver.solvePostfix
 import com.example.tableeditorpluginversion.parser.TermSolver.transformInfixToPostfix
 import javax.swing.event.TableModelListener
@@ -46,9 +47,11 @@ class FormulaProcessor(
             val rowNumber = part.dropWhile { it.isLetter() }.toInt() - 1
             val columnNumber = columnLetters.fold(0) { acc, c -> acc * 26 + (c - 'A' + 1) }
 
-            val currentCell = Pair(row, col)
-            val dependentCell = Pair(rowNumber, columnNumber)
-            formulaManager.addDependency(currentCell, dependentCell)
+            val currentCellNode = Node(row, col)
+            val dependentCellNode = Node(rowNumber, columnNumber)
+
+            formulaManager.addDependency(currentCellNode, dependentCellNode)
+
             try {
                 val value = model.getValueAt(rowNumber, columnNumber)?.toString()
                 value ?: throw InvalidCellReferenceException("Invalid cell reference: $part not found.")
