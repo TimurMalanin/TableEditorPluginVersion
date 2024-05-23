@@ -28,7 +28,7 @@ class LoadCsvAction : AnAction() {
 
     private fun readCsvFile(filePath: String) {
         val data = readCsvToArray(filePath)
-        UI(data)
+        UI(data, filePath)
     }
 
     private fun readCsvToArray(filePath: String): Array<Array<String>> {

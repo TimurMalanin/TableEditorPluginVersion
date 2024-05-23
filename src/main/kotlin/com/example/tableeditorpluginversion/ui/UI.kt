@@ -1,22 +1,31 @@
 package com.example.tableeditorpluginversion.ui
 
 import com.example.tableeditorpluginversion.ui.controls.ControlPanel
-import com.example.tableeditorpluginversion.ui.utils.doubleTransformation
-import com.example.tableeditorpluginversion.ui.utils.duplicatesTransformation
-import com.example.tableeditorpluginversion.ui.utils.exportCsv
-import com.example.tableeditorpluginversion.ui.utils.minTransformation
+import com.example.tableeditorpluginversion.ui.utils.*
 import java.awt.BorderLayout
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.io.File
 import java.io.FileWriter
 import javax.swing.*
 
 class UI(
-    data: TableData,
+    data: TableData,private var filePath: String
 ) {
     private val frame = JFrame("CSV Data Viewer").apply {
         setSize(500, 500)
-        defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+        defaultCloseOperation = JFrame.HIDE_ON_CLOSE
+        addWindowListener(object : WindowAdapter() {
+            override fun windowClosing(e: WindowEvent?) {
+                saveCsvAndHide()
+            }
+        })
         isVisible = true
+    }
+
+    private fun saveCsvAndHide() {
+        saveCsv(tableView.tableModel, File(filePath), frame)
+        frame.isVisible = false
     }
 
     private val tableView = TableView(data)

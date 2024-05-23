@@ -22,7 +22,7 @@ fun exportCsv(table: DefaultTableModel, frame: JFrame) {
 private fun File.correctExtension(extension: String): File =
     if (!name.endsWith(extension)) File("$absolutePath$extension") else this
 
-private fun saveCsv(table: DefaultTableModel, file: File, frame: JFrame) {
+fun saveCsv(table: DefaultTableModel, file: File, frame: JFrame) {
     try {
         FileWriter(file).use { writer ->
             for (row in 0 until table.rowCount) {

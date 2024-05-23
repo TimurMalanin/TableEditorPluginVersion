@@ -34,12 +34,4 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
     </actions>
-
-
-    <fileType name="CSV"
-              extensions="csv"
-              language="CSV"
-              fieldName="INSTANCE"
-              implementationClass="org.jetbrains.plugins.template.ui.CsvFileType"/>
-    <fileEditorProvider implementation="org.jetbrains.plugins.template.ui."/>
 </idea-plugin>

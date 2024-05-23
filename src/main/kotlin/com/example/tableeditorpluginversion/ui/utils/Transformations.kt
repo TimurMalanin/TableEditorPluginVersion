@@ -8,14 +8,16 @@ fun minTransformation(table: DefaultTableModel, columnLetter: String) {
 
     var minValue = (0 until table.rowCount)
         .mapNotNull { table.getValueAt(it, columnIndex)?.toString() }
+        .filter { it.isNotEmpty() }
         .minOrNull()
+
     if (minValue.isNullOrEmpty()) minValue = 0.toString()
     (0 until table.rowCount).forEach { row ->
         table.setValueAt(minValue, row, columnIndex)
     }
 }
 
-fun duplicatesTransformation(table: DefaultTableModel,columnLetter: String) {
+fun duplicatesTransformation(table: DefaultTableModel, columnLetter: String) {
     val columnIndex = columnLetterToIndex(columnLetter)
     if (columnIndex < 0 || columnIndex >= table.columnCount) return
 
@@ -30,7 +32,7 @@ fun duplicatesTransformation(table: DefaultTableModel,columnLetter: String) {
     }
 }
 
-fun doubleTransformation(table: DefaultTableModel,columnLetter: String) {
+fun doubleTransformation(table: DefaultTableModel, columnLetter: String) {
     val columnIndex = columnLetterToIndex(columnLetter)
     if (columnIndex < 0 || columnIndex >= table.columnCount) return
 
@@ -41,4 +43,4 @@ fun doubleTransformation(table: DefaultTableModel,columnLetter: String) {
     }
 }
 
-private fun columnLetterToIndex(columnLetter: String): Int = columnLetter.uppercase().first() - 'A' + 1
+private fun columnLetterToIndex(columnLetter: String): Int = columnLetter.fold(0) { acc, c -> acc * 26 + (c - 'A' + 1) }
