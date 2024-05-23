@@ -28,10 +28,3 @@ The application recognizes the following operations:
 
 ![Example of work GIF](media/exampleOfWork.gif)
 
-
-
-Run the project:
-
-```bash
-./gradlew run
-```
