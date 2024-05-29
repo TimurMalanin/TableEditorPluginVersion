@@ -26,5 +26,5 @@ The application recognizes the following operations:
 
 ## Example of work
 
-![Example of work GIF](media/exampleOfWork.gif)
+![Example of work GIF](media/exampleOfWorkMacOs.gif)
 
